@@ -64,14 +64,14 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
           <div className="flex justify-center">
             <img 
               src={inspersecLogo} 
-              alt="Inspersec CTF Logo" 
+              alt="Kairo Logo" 
               className="h-16 w-auto object-contain transition-transform hover:scale-105"
               loading="eager"
             />
           </div>
           <div>
             <h1 className="text-3xl font-code font-bold tracking-tight">
-              Inspersec CTF
+              Kairo
             </h1>
             <p className="text-muted-foreground mt-2">
               Plataforma de Competições de Cibersegurança

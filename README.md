@@ -1,15 +1,15 @@
-# 🛡️ Inspersec CTF Platform
+# 🛡️ Kairo Platform
 
 Uma plataforma moderna e elegante para competições de Capture The Flag (CTF) em cibersegurança, desenvolvida com React, TypeScript e uma interface inspirada em terminais de hackers.
 
-![Inspersec CTF](https://img.shields.io/badge/Inspersec-CTF-red?style=for-the-badge&logo=shield)
+![Kairo](https://img.shields.io/badge/Kairo-red?style=for-the-badge&logo=shield)
 ![React](https://img.shields.io/badge/React-18.3.1-blue?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=for-the-badge&logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-5.4.19-purple?style=for-the-badge&logo=vite)
 
 ## 🎯 Visão Geral
 
-O **Inspersec CTF** é uma plataforma web completa para gerenciar e participar de competições de cibersegurança. A aplicação oferece uma experiência imersiva com design inspirado em terminais de hackers, permitindo que usuários participem de múltiplas competições, resolvam desafios categorizados e acompanhem rankings em tempo real.
+O **Kairo** é uma plataforma web completa para gerenciar e participar de competições de cibersegurança. A aplicação oferece uma experiência imersiva com design inspirado em terminais de hackers, permitindo que usuários participem de múltiplas competições, resolvam desafios categorizados e acompanhem rankings em tempo real.
 
 ### ✨ Características Principais
 
@@ -205,7 +205,7 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 VITE_API_URL=http://localhost:3000
-VITE_APP_NAME=Inspersec CTF
+VITE_APP_NAME=Kairo
 ```
 
 ### Personalização
@@ -301,4 +301,4 @@ Desenvolvido com ❤️ pela equipe **Inspersec** para a comunidade de cibersegu
 
 ---
 
-**Inspersec CTF** - Transformando a educação em cibersegurança através de competições interativas e envolventes! 🛡️✨
+**Kairo** - Transformando a educação em cibersegurança através de competições interativas e envolventes! 🛡️✨

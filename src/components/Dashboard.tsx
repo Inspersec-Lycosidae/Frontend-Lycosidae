@@ -145,11 +145,11 @@ export const Dashboard = ({ onLogout }: DashboardProps) => {
           <div className="flex items-center space-x-4">
             <img 
               src={inspersecLogo} 
-              alt="Inspersec CTF Logo" 
+              alt="Kairo Logo" 
               className="h-8 w-auto object-contain transition-transform hover:scale-105"
               loading="eager"
             />
-            <h1 className="text-xl font-code font-bold">Inspersec CTF</h1>
+            <h1 className="text-xl font-code font-bold">Kairo</h1>
             {currentCompetition && (
               <Badge variant="outline" className="font-code">
                 {currentCompetition.name}
