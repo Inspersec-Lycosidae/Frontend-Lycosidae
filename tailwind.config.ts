@@ -8,6 +8,11 @@ export default {
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
 	],
+	// Ativar debug do Tailwind
+	safelist: [
+		// Exemplo: adicione classes que não estão sendo detectadas automaticamente
+		// 'bg-red-500', 'text-white', 'p-4'
+	], 
 	prefix: "",
 	theme: {
 		container: {

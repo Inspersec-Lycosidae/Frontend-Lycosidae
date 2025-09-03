@@ -9,6 +9,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  logLevel: 'info', // Para mais logs: 'info', 'warn', 'error', 'silent'
+  clearScreen: false, // Mantém logs na tela
   plugins: [
     react(),
     mode === 'development' &&

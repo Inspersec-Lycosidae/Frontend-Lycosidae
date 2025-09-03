@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield } from "lucide-react";
 import { User } from "@/types";
 import { saveUser, initializeStorage } from "@/utils/storage";
+import inspersecLogo from "@/assets/inspersec-logo.png";
 
 interface AuthPageProps {
   onLogin: () => void;
@@ -61,7 +62,12 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
         {/* Logo and Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center">
-            <Shield className="h-16 w-16 text-primary" />
+            <img 
+              src={inspersecLogo} 
+              alt="Inspersec CTF Logo" 
+              className="h-16 w-auto object-contain transition-transform hover:scale-105"
+              loading="eager"
+            />
           </div>
           <div>
             <h1 className="text-3xl font-code font-bold tracking-tight">

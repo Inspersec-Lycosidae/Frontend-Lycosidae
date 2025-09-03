@@ -19,6 +19,7 @@ import {
   Wrench,
   Target
 } from "lucide-react";
+import inspersecLogo from "@/assets/inspersec-logo.png";
 import { CompetitionManager } from "@/components/CompetitionManager";
 import { User, Challenge, Competition } from "@/types";
 import { 
@@ -142,7 +143,12 @@ export const Dashboard = ({ onLogout }: DashboardProps) => {
       <header className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Shield className="h-8 w-8 text-primary" />
+            <img 
+              src={inspersecLogo} 
+              alt="Inspersec CTF Logo" 
+              className="h-8 w-auto object-contain transition-transform hover:scale-105"
+              loading="eager"
+            />
             <h1 className="text-xl font-code font-bold">Inspersec CTF</h1>
             {currentCompetition && (
               <Badge variant="outline" className="font-code">
