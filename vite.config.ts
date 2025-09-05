@@ -8,6 +8,13 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'http://0.0.0.0:8082',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
   logLevel: 'info', // Para mais logs: 'info', 'warn', 'error', 'silent'
   clearScreen: false, // Mantém logs na tela

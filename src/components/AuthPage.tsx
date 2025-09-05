@@ -1,64 +1,40 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield } from "lucide-react";
-import { User } from "@/types";
-import { saveUser, initializeStorage } from "@/utils/storage";
+import { Shield, Eye, EyeOff } from "lucide-react";
+import { useLoginForm, useRegisterForm } from "@/hooks/useAuth";
+import { ApiNotifications } from "@/components/ApiNotifications";
+import { initializeStorage } from "@/utils/storage";
 import inspersecLogo from "@/assets/inspersec-logo.png";
+import { useState } from "react";
 
 interface AuthPageProps {
   onLogin: () => void;
 }
 
 export const AuthPage = ({ onLogin }: AuthPageProps) => {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [registerData, setRegisterData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  });
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  // Hooks para gerenciar os formulários
+  const loginForm = useLoginForm(onLogin);
+  const registerForm = useRegisterForm(onLogin);
 
   useEffect(() => {
     initializeStorage();
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simular login - criar usuário temporário para demo
-    const user: User = {
-      id: Date.now().toString(),
-      username: loginData.email.split('@')[0] || 'user',
-      email: loginData.email,
-      competitions: []
-    };
-    saveUser(user);
-    onLogin();
-  };
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (registerData.password !== registerData.confirmPassword) {
-      alert("Senhas não coincidem!");
-      return;
-    }
-    
-    const user: User = {
-      id: Date.now().toString(),
-      username: registerData.username,
-      email: registerData.email,
-      competitions: []
-    };
-    saveUser(user);
-    onLogin();
-  };
+  // Handlers removidos - agora os hooks cuidam de tudo
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md space-y-8">
+    <>
+      <ApiNotifications />
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="w-full max-w-md space-y-8">
         {/* Logo and Header */}
         <div className="text-center space-y-4">
           <div className="flex justify-center">
@@ -95,102 +71,194 @@ export const AuthPage = ({ onLogin }: AuthPageProps) => {
               </TabsList>
               
               <TabsContent value="login" className="space-y-4 mt-6">
-                <form onSubmit={handleLogin} className="space-y-4">
+                <form onSubmit={loginForm.handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email ou Usuário</Label>
+                    <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
-                      type="text"
-                      placeholder="seu@email.com"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                      type="email"
+                      placeholder="seu@gmail.com"
+                      value={loginForm.formData.email}
+                      onChange={(e) => loginForm.setFieldValue('email', e.target.value)}
                       className="focus-terminal"
                       required
                     />
+                    {loginForm.errors.email && (
+                      <p className="text-sm text-red-500">{loginForm.errors.email}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                      className="focus-terminal"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showLoginPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={loginForm.formData.password}
+                        onChange={(e) => loginForm.setFieldValue('password', e.target.value)}
+                        className="focus-terminal pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      >
+                        {showLoginPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {loginForm.errors.password && (
+                      <p className="text-sm text-red-500">{loginForm.errors.password}</p>
+                    )}
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full bg-primary hover:bg-primary/90 font-code font-medium transition-glow hover:glow-primary"
+                    disabled={loginForm.isSubmitting}
+                    className="w-full bg-primary hover:bg-primary/90 font-code font-medium transition-glow hover:glow-primary disabled:opacity-50"
                   >
-                    Entrar
+                    {loginForm.isSubmitting ? 'Entrando...' : 'Entrar'}
                   </Button>
                 </form>
               </TabsContent>
               
               <TabsContent value="register" className="space-y-4 mt-6">
-                <form onSubmit={handleRegister} className="space-y-4">
+                <form onSubmit={registerForm.handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="username">Nome de Usuário</Label>
                     <Input
                       id="username"
                       type="text"
                       placeholder="hacker123"
-                      value={registerData.username}
-                      onChange={(e) => setRegisterData({...registerData, username: e.target.value})}
+                      value={registerForm.formData.username}
+                      onChange={(e) => registerForm.setFieldValue('username', e.target.value)}
                       className="focus-terminal font-code"
                       required
                     />
+                    {registerForm.errors.username && (
+                      <p className="text-sm text-red-500">{registerForm.errors.username}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      3-50 caracteres, apenas letras, números, _ e -
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="reg-email">Email</Label>
                     <Input
                       id="reg-email"
                       type="email"
-                      placeholder="seu@email.com"
-                      value={registerData.email}
-                      onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                      placeholder="seu@gmail.com"
+                      value={registerForm.formData.email}
+                      onChange={(e) => registerForm.setFieldValue('email', e.target.value)}
                       className="focus-terminal"
                       required
                     />
+                    {registerForm.errors.email && (
+                      <p className="text-sm text-red-500">{registerForm.errors.email}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Use domínios permitidos: @gmail.com, @hotmail.com, @outlook.com
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Telefone (opcional)</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+5511999999999"
+                      value={registerForm.formData.phone_number}
+                      onChange={(e) => registerForm.setFieldValue('phone_number', e.target.value)}
+                      className="focus-terminal"
+                    />
+                    {registerForm.errors.phone_number && (
+                      <p className="text-sm text-red-500">{registerForm.errors.phone_number}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Formato internacional: +5511999999999
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="reg-password">Senha</Label>
-                    <Input
-                      id="reg-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={registerData.password}
-                      onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
-                      className="focus-terminal"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="reg-password"
+                        type={showRegisterPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={registerForm.formData.password}
+                        onChange={(e) => registerForm.setFieldValue('password', e.target.value)}
+                        className="focus-terminal pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      >
+                        {showRegisterPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {registerForm.errors.password && (
+                      <p className="text-sm text-red-500">{registerForm.errors.password}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Mín. 8 chars, maiúscula, minúscula, número e especial
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirm-password">Confirmar Senha</Label>
-                    <Input
-                      id="confirm-password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={registerData.confirmPassword}
-                      onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
-                      className="focus-terminal"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirm-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        value={registerForm.formData.confirmPassword}
+                        onChange={(e) => registerForm.setFieldValue('confirmPassword', e.target.value)}
+                        className="focus-terminal pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {registerForm.errors.confirmPassword && (
+                      <p className="text-sm text-red-500">{registerForm.errors.confirmPassword}</p>
+                    )}
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full bg-primary hover:bg-primary/90 font-code font-medium transition-glow hover:glow-primary"
+                    disabled={registerForm.isSubmitting}
+                    className="w-full bg-primary hover:bg-primary/90 font-code font-medium transition-glow hover:glow-primary disabled:opacity-50"
                   >
-                    Registrar
+                    {registerForm.isSubmitting ? 'Registrando...' : 'Registrar'}
                   </Button>
                 </form>
               </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
